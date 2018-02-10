@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<title>Send WednesdayCoin!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.myLink {display: none}
+
+body, html {
+	height: 100%;
+	line-height: 1.8;
+}
+
+.w3-bar .w3-button {
+	padding: 16px;
+}
+textarea {
+	resize: none;
+}
+</style>
+<body class="w3-light-grey">
+
+	<!-- Navigation Bar -->
+	<div class="w3-top">
+		<div class="w3-bar w3-white w3-card" id="myNavbar">
+			<a href="https://wednesdaycoin.io" class="w3-bar-item w3-button w3-wide">WednesdayCoin</a>
+			<a href="#" id="tokens" class="w3-bar-item w3-button w3-right w3-text-grey"></a>
+		</div>
+	</div>
+
+	<!-- Header -->
+	<header class="w3-display-container w3-content" style="max-width:1500px">
+		<img class="w3-image" src="../images/london2.jpg" alt="London" width="1500" height="700">
+		<div class="w3-display-middle" style="width:65%">
+			<div class="w3-bar w3-black">
+				<button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Transfer');"><i class="fa fa-dollar w3-margin-right"></i>Transfer</button>
+				<button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'TransferAll');"><i class="fa fa-list w3-margin-right"></i>Multiple Transfers</button>
+				<!--button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Car');"><i class="fa fa-car w3-margin-right"></i>Rental</button-->
+			</div>
+
+			<!-- Tabs -->
+			<div id="Transfer" class="w3-container w3-white w3-padding-16 myLink">
+				<h3>This is a little BETA utility that should help people send WednesdayCoin to whomever they want. This currently requires metamask or mist browser to use.</h3>
+				<div class="w3-row-padding" style="margin:0 -16px;">
+					<div class="w3-half">
+						<label>Transfer</label>
+						<input id="address" class="w3-input w3-border" type="text" placeholder="to address">
+					</div>
+					<div class="w3-half">
+						<label>Amount</label>
+						<input id="amount" class="w3-input w3-border" type="text" placeholder="">
+					</div>
+				</div>
+				<p><button id="transfer" class="w3-button w3-dark-grey">Transfer</button></p>
+			</div>
+
+			<div id="TransferAll" class="w3-container w3-white w3-padding-16 myLink">
+				<h3>Alpha Utility to send the same amount of coins to multiple addresses, addresses should be comma separated e.g. 0x0...,0x1...,0x2...,etc. If multiple popups occur, it is ok to cancel out of all but one.</h3>
+				<div class="w3-row-padding" style="margin:0 -16px;">
+					<div class="w3-half">
+						<label>Transfers</label>
+						<textarea id="addresses" class="w3-input w3-border" rows="5" cols="50"></textarea>
+					</div>
+					<div class="w3-half">
+						<label>Amount</label>
+						<input id="listAmount" class="w3-input w3-border" type="text" placeholder="">
+					</div>
+				</div>
+				<p><button id="transferAll" class="w3-button w3-dark-grey">Transfer All</button></p>
+			</div>
+		</div>
+	</header>
+
+	<!-- Page content -->
+	<div class="w3-content" style="max-width:1100px;">
+
+		<div class="w3-container w3-margin-top">
+			<h3>Recent Transactions</h3>
+			<h6 id="transactions"></h6>
+		</div>
+
+		<!-- End page content -->
+	</div>
+
+	<!-- Footer -->
+	<footer class="w3-container w3-center w3-opacity w3-margin-bottom">
+		<div class="w3-xlarge w3-padding-16">
+			<i class="fa fa-facebook-official w3-hover-opacity"></i>
+			<i class="fa fa-instagram w3-hover-opacity"></i>
+			<i class="fa fa-snapchat w3-hover-opacity"></i>
+			<i class="fa fa-pinterest-p w3-hover-opacity"></i>
+			<i class="fa fa-twitter w3-hover-opacity"></i>
+			<i class="fa fa-linkedin w3-hover-opacity"></i>
+		</div>
+		<p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+	</footer>
+
+	<script>
+// Tabs
+function openLink(evt, linkName) {
+	var i, x, tablinks;
+	x = document.getElementsByClassName("myLink");
+	for (i = 0; i < x.length; i++) {
+		x[i].style.display = "none";
+	}
+	tablinks = document.getElementsByClassName("tablink");
+	for (i = 0; i < x.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+	}
+	document.getElementById(linkName).style.display = "block";
+	evt.currentTarget.className += " w3-red";
+}
+// Click on the first tablink on load
+document.getElementsByClassName("tablink")[0].click();
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+       // Our future code here..
+       if (typeof web3 !== 'undefined') {
+       	web3 = new Web3(web3.currentProvider);
+       } else {
+            // set the provider you want from Web3.providers
+            //web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            alert('This service is in beta: Provider could not be found. This is currently only working with metamask so please download the metamask chrome plugin. We will redirect you back to the home page, thank you.');
+            window.location.replace("https://wednesdaycoin.io");
+        }
+
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        //Replace contract address here with the contract address of token
+        var contractAddress = '0x7848ae8f19671dc05966dafbefbbbb0308bdfabd';
+        //Replace cABI with ABI of token
+        var coinContract = web3.eth.contract([
+        {
+        	"constant": true,
+        	"inputs": [],
+        	"name": "name",
+        	"outputs": [
+        	{
+        		"name": "",
+        		"type": "string"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"constant": false,
+        	"inputs": [
+        	{
+        		"name": "_spender",
+        		"type": "address"
+        	},
+        	{
+        		"name": "_value",
+        		"type": "uint256"
+        	}
+        	],
+        	"name": "approve",
+        	"outputs": [
+        	{
+        		"name": "success",
+        		"type": "bool"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "nonpayable",
+        	"type": "function"
+        },
+        {
+        	"constant": true,
+        	"inputs": [],
+        	"name": "totalSupply",
+        	"outputs": [
+        	{
+        		"name": "",
+        		"type": "uint256"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"constant": false,
+        	"inputs": [
+        	{
+        		"name": "_from",
+        		"type": "address"
+        	},
+        	{
+        		"name": "_to",
+        		"type": "address"
+        	},
+        	{
+        		"name": "_value",
+        		"type": "uint256"
+        	}
+        	],
+        	"name": "transferFrom",
+        	"outputs": [
+        	{
+        		"name": "success",
+        		"type": "bool"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "nonpayable",
+        	"type": "function"
+        },
+        {
+        	"constant": true,
+        	"inputs": [],
+        	"name": "decimals",
+        	"outputs": [
+        	{
+        		"name": "",
+        		"type": "uint8"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"constant": true,
+        	"inputs": [],
+        	"name": "version",
+        	"outputs": [
+        	{
+        		"name": "",
+        		"type": "string"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"constant": true,
+        	"inputs": [
+        	{
+        		"name": "_owner",
+        		"type": "address"
+        	}
+        	],
+        	"name": "balanceOf",
+        	"outputs": [
+        	{
+        		"name": "balance",
+        		"type": "uint256"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"constant": true,
+        	"inputs": [],
+        	"name": "symbol",
+        	"outputs": [
+        	{
+        		"name": "",
+        		"type": "string"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"constant": false,
+        	"inputs": [
+        	{
+        		"name": "_to",
+        		"type": "address"
+        	},
+        	{
+        		"name": "_value",
+        		"type": "uint256"
+        	}
+        	],
+        	"name": "transfer",
+        	"outputs": [
+        	{
+        		"name": "success",
+        		"type": "bool"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "nonpayable",
+        	"type": "function"
+        },
+        {
+        	"constant": false,
+        	"inputs": [
+        	{
+        		"name": "_spender",
+        		"type": "address"
+        	},
+        	{
+        		"name": "_value",
+        		"type": "uint256"
+        	},
+        	{
+        		"name": "_extraData",
+        		"type": "bytes"
+        	}
+        	],
+        	"name": "approveAndCall",
+        	"outputs": [
+        	{
+        		"name": "success",
+        		"type": "bool"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "nonpayable",
+        	"type": "function"
+        },
+        {
+        	"constant": true,
+        	"inputs": [
+        	{
+        		"name": "_owner",
+        		"type": "address"
+        	},
+        	{
+        		"name": "_spender",
+        		"type": "address"
+        	}
+        	],
+        	"name": "allowance",
+        	"outputs": [
+        	{
+        		"name": "remaining",
+        		"type": "uint256"
+        	}
+        	],
+        	"payable": false,
+        	"stateMutability": "view",
+        	"type": "function"
+        },
+        {
+        	"inputs": [],
+        	"payable": false,
+        	"stateMutability": "nonpayable",
+        	"type": "constructor"
+        },
+        {
+        	"payable": false,
+        	"stateMutability": "nonpayable",
+        	"type": "fallback"
+        },
+        {
+        	"anonymous": false,
+        	"inputs": [
+        	{
+        		"indexed": true,
+        		"name": "_from",
+        		"type": "address"
+        	},
+        	{
+        		"indexed": true,
+        		"name": "_to",
+        		"type": "address"
+        	},
+        	{
+        		"indexed": false,
+        		"name": "_value",
+        		"type": "uint256"
+        	}
+        	],
+        	"name": "Transfer",
+        	"type": "event"
+        },
+        {
+        	"anonymous": false,
+        	"inputs": [
+        	{
+        		"indexed": true,
+        		"name": "_owner",
+        		"type": "address"
+        	},
+        	{
+        		"indexed": true,
+        		"name": "_spender",
+        		"type": "address"
+        	},
+        	{
+        		"indexed": false,
+        		"name": "_value",
+        		"type": "uint256"
+        	}
+        	],
+        	"name": "Approval",
+        	"type": "event"
+        }
+        ]);
+
+var decimalHolder = 1000000000000000000;		
+
+var coin = coinContract.at(contractAddress);
+console.log(coin);
+
+var balance = 0;
+var account = web3.eth.accounts[0];
+var accountInterval = setInterval(function() {
+	if (web3.eth.accounts[0] !== account) {
+		account = web3.eth.accounts[0];
+		coin.balanceOf(account, function(error, result){
+			if(!error)
+			{
+				balance = Math.ceil(result/decimalHolder);
+				$("#tokens").html('My Balance: ' + balance);
+				console.log(result);
+			}
+			else
+				console.error(error);
+		});
+	}
+}, 100);
+
+
+$("#transfer").click(function() {
+				//user-friendly checks
+				if (!web3.isAddress($('#address').val())) {
+					alert('Address is invalid!');
+					return;	
+				}
+
+				if ($("#amount").val() <= 0) {
+					alert('Amount to transfer cannot be zero or less than zero!');
+					return;	
+				}
+
+				if ($('#amount').val() <= 0 || $('#amount').val() > balance) {
+					alert('The amount you are trying to send is more than your balance');
+					return;	
+				}
+
+        		//alert(accounts[i]);
+        		coin.transfer($("#address").val(), $("#amount").val() * decimalHolder, function(error, result) {
+        			if (!error) {
+        				console.log(result);
+        				$("#transactions").prepend("Transfer to " + $("#address").val() + " is successful. TxHash: <a href=\"https://etherscan.io/tx/" + result + "\">"+result+"</a> <br>");
+        			} else {
+        				console.log(error);
+        				alert("Transfer could not completed. PLease try again later");
+        			}
+        		});
+        	});
+
+$("#transferAll").click(function() {
+
+			if ($("#addresses").val().slice(-1) == ",") {
+				$("#addresses").val($("#addresses").val().slice(0,-1));
+			}
+			//user-friendly checks
+			var accounts = $("#addresses").val().replace(/[\t\n]+/g,'').trim().split(",");	
+
+			if ($("#listAmount").val() <= 0) {
+				alert('Amount to transfer cannot be zero or less than zero!');
+				return;	
+			}
+
+        	//alert(accounts);
+        	for (var i  = 0; i < accounts.length; i++) {
+        		//alert(accounts[i]);
+        		if (accounts[i].length > 0 && web3.isAddress(accounts[i])) {
+        			coin.transfer(accounts[i], $("#listAmount").val() * decimalHolder, function(error, result) {
+        				if (!error) {
+        					console.log(result);
+        					$("#transactions").prepend("Transfer is successful. TxHash: <a href=\"https://etherscan.io/tx/" + result + "\">"+result+"</a> <br>");
+        				} else {
+        					console.log(error);
+        					//alert("Transfer All could not be done. Please try again later");
+        				}
+        			});
+        		} else {
+        			alert(accounts[i] + " is not a valid address");
+        		}
+        		
+        	}
+        });
+
+$("#getBalance").click(function() {
+	coin.balanceOf($("#address").val(), function(error, result) {
+		if(!error) {
+			$("#amount").val(result/decimalHolder);
+		} else {
+			console.error(error);
+			alert('Balance cuuld not be acquired.');
+		}
+	});
+});
+
+$("#address").on("input",function () {	
+	if (web3.isAddress($('#address').val())) {
+		console.log('Valid ethereum address.');
+		$('#address').css('border-color','green');
+	}
+	else {
+		console.log('Invalid Ethereum address.');
+		$('#address').css('border-color','red');
+	}
+})
+
+$("#amount").on("input",function () {	
+	if ($('#amount').val() > 0 && $('#amount').val() <= balance) {
+		console.log('Valid amount.');
+		$('#amount').css('border-color','green');
+	}
+	else {
+		console.log('Invalid amount.');
+		$('#amount').css('border-color','red');
+	}
+})
+
+$("#listAmount").on("input",function () {	
+	if ($('#listAmount').val() > 0 && $('#listAmount').val() <= balance) {
+		console.log('Valid amount.');
+		$('#listAmount').css('border-color','green');
+	}
+	else {
+		console.log('Invalid amount.');
+		$('#listAmount').css('border-color','red');
+	}
+})
+
+</script>
+
+</body>
+</html>
+
